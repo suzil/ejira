@@ -57,14 +57,6 @@
   :type 'string
   :group 'jiralib2)
 
-;; (defvar jiralib2-user-login-name nil
-;;   "The name of the user logged into JIRA.
-;; This is maintained by `jiralib2-login'.")
-
-;; (defvar jiralib2-api-token nil
-;;   "The name of the user logged into JIRA.
-;; This is maintained by `jiralib2-login'.")
-
 (defun jiralib2--verify-status (response)
   "Check status code of RESPONSE, return data or throw an error."
   (let ((status-code (request-response-status-code response)))
