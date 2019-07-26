@@ -1,4 +1,4 @@
-;;; ejira.el --- Syncing between Jira and Org-mode.
+;;; ejira.el --- Syncing between Jira and Org-mode.el
 
 ;; Copyright (C) 2017 - 2018 Henrik Nyman
 
@@ -44,14 +44,13 @@
 (require 'cl-lib)
 (require 's)
 
-
 
 (defgroup ejira nil
   "JIRA synchronization for Emacs."
   :prefix "ejira-")
 
-(defvar ejira-done-states '("Done" "Resolved" "Duplicated" "Rejected"))
-(defvar ejira-in-progress-states '("In Progress" "In Review" "Under Review" "Testing"))
+(defvar ejira-done-states '("Done" "Duplicate" "Won't Fix"))
+(defvar ejira-in-progress-states '("In Progress" "Testing"))
 (defvar ejira-high-priorities '("High" "Highest"))
 (defvar ejira-low-priorities '("Low" "Lowest"))
 (defvar ejira-projects nil
@@ -63,11 +62,6 @@
 (defvar ejira-no-epic-postfix "-NO-EPIC")
 (defvar ejira-sprint-length 2
   "Length of a sprint in weeks.")
-
-
-(defvar ejira-sprint-field 'customfield_10001)
-(defvar ejira-epic-field 'customfield_10002)
-(defvar ejira-epic-summary-field 'customfield_10004)
 
 (cl-defstruct jira-issue
   (key nil :read-only t)
@@ -172,7 +166,7 @@
        :description (ejira-extract-value issue 'fields 'summary)
        :comments (mapcar #'ejira-parse-comment
                          (ejira-extract-value issue 'fields 'comment 'comments)))
-
+    
     (make-jira-issue
      :key (ejira-extract-value issue 'key)
      :type (ejira-extract-value issue 'fields 'issuetype 'name)
